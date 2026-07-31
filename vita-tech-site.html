@@ -77,6 +77,20 @@ section{padding:90px 0}
 .contact-actions{margin-top:32px;display:flex;gap:13px;justify-content:center;flex-wrap:wrap}
 .contact-meta{margin-top:40px;display:flex;gap:12px 36px;justify-content:center;flex-wrap:wrap;font-family:"IBM Plex Mono",monospace;font-size:13px;color:rgba(234,242,252,.6)}
 .contact-meta a:hover{color:var(--cyan)}
+.contact-form{margin-top:40px;text-align:left;max-width:640px;margin-left:auto;margin-right:auto;display:flex;flex-direction:column;gap:16px}
+.cf-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.cf-field{display:flex;flex-direction:column;gap:6px}
+.cf-field label{font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;color:rgba(234,242,252,.6)}
+.cf-field input,.cf-field select,.cf-field textarea{font-family:inherit;font-size:14.5px;padding:11px 14px;border-radius:9px;border:1px solid rgba(234,242,252,.22);background:rgba(255,255,255,.05);color:#EAF2FC}
+.cf-field input:focus,.cf-field select:focus,.cf-field textarea:focus{outline:none;border-color:var(--sky)}
+.cf-field textarea{resize:vertical;min-height:110px}
+.cf-field input::placeholder,.cf-field textarea::placeholder{color:rgba(234,242,252,.4)}
+.cf-field select{cursor:pointer}
+.cf-field select option{color:var(--ink)}
+.contact-form .btn-blue{align-self:flex-start;border:0}
+.cf-note{font-size:12.5px;color:rgba(234,242,252,.55);margin-top:-4px}
+.cf-status{font-size:13px;color:var(--cyan);min-height:18px}
+@media(max-width:640px){.cf-row{grid-template-columns:1fr}}
 footer{background:#050F1E;color:rgba(234,242,252,.55);padding:34px 0;font-size:13px}
 .foot-in{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center}
 .foot-legal{font-family:"IBM Plex Mono",monospace;line-height:1.7}
@@ -186,6 +200,25 @@ textarea{resize:vertical;min-height:52px}
     <span class="eyebrow" style="color:var(--cyan)" data-i18n="contact_eyebrow"></span>
     <h2 id="contactTitle"></h2>
     <p data-i18n="contact_p"></p>
+    <form class="contact-form" id="contactForm">
+      <div class="cf-row">
+        <div class="cf-field"><label for="cfName" data-i18n="cf_name"></label><input type="text" id="cfName" required></div>
+        <div class="cf-field"><label for="cfEmail" data-i18n="cf_email"></label><input type="email" id="cfEmail" required></div>
+      </div>
+      <div class="cf-field">
+        <label for="cfType" data-i18n="cf_type"></label>
+        <select id="cfType">
+          <option value="support" data-i18n="cf_type_support"></option>
+          <option value="collaboration" data-i18n="cf_type_collab"></option>
+          <option value="conseil" data-i18n="cf_type_conseil"></option>
+          <option value="other" data-i18n="cf_type_other"></option>
+        </select>
+      </div>
+      <div class="cf-field"><label for="cfMessage" data-i18n="cf_message"></label><textarea id="cfMessage" rows="5" required></textarea></div>
+      <button type="submit" class="btn-blue" data-i18n="cf_submit"></button>
+      <p class="cf-note" data-i18n="cf_note"></p>
+      <p class="cf-status" id="cfStatus"></p>
+    </form>
     <div class="contact-actions">
       <a class="btn-blue" id="cEmail"></a>
       <a class="btn-ghost" href="https://vita-agro.com" data-i18n="contact_group"></a>
@@ -217,6 +250,10 @@ const T={
   contact_eyebrow:"Work with us",contact_title:"Your operations,|powered by our software.",
   contact_p:"Licence, subscription or tailored deployment — tell us your context.",
   contact_group:"Discover the group",
+  cf_name:"Your name",cf_email:"Your email",cf_type:"What do you need?",
+  cf_type_support:"Support",cf_type_collab:"Collaboration",cf_type_conseil:"Advisory",cf_type_other:"Other",
+  cf_message:"Describe your need",cf_submit:"Send message",
+  cf_note:"This opens your email app with the message ready to send to vitatech@vita-agro.com.",
   foot_by:"a brand of",foot_city:"Casablanca, Morocco",foot_tag:"Solutions IT & Innovation",
   m1k:"01 · Field-born",m1h:"Real operations",m1p:"Our products are extracted from platforms running in daily logistics and distribution — not built in a lab.",
   m2k:"02 · AI-native",m2h:"Automation inside",m2p:"Intelligent agents handle the repetitive work: orders, quality checks, routing, reporting.",
@@ -234,6 +271,10 @@ const T={
   contact_eyebrow:"Travaillons ensemble",contact_title:"Vos opérations,|propulsées par nos logiciels.",
   contact_p:"Licence, abonnement ou déploiement sur mesure — parlez-nous de votre contexte.",
   contact_group:"Découvrir le groupe",
+  cf_name:"Votre nom",cf_email:"Votre email",cf_type:"De quoi avez-vous besoin ?",
+  cf_type_support:"Support",cf_type_collab:"Collaboration",cf_type_conseil:"Conseil",cf_type_other:"Autre",
+  cf_message:"Décrivez votre besoin",cf_submit:"Envoyer le message",
+  cf_note:"Ceci ouvre votre messagerie avec le message prêt à envoyer à vitatech@vita-agro.com.",
   foot_by:"une marque de",foot_city:"Casablanca, Maroc",foot_tag:"Solutions IT & Innovation",
   m1k:"01 · Né du terrain",m1h:"Opérations réelles",m1p:"Nos produits sont extraits de plateformes qui tournent chaque jour en logistique et distribution — pas conçus en labo.",
   m2k:"02 · IA native",m2h:"Automatisation intégrée",m2p:"Des agents intelligents absorbent le travail répétitif : commandes, contrôles qualité, tournées, reporting.",
@@ -339,6 +380,23 @@ function renderContact(){
  em.textContent=c.email;em.href='mailto:'+c.email;em.hidden=!c.vis_email;
  document.getElementById('contactMeta').innerHTML=`<a href="https://vita-agro.com" target="_blank" rel="noopener">vita-agro.com</a><span>Vita Tech · ${S.lang==='fr'?'Casablanca, Maroc':'Casablanca, Morocco'}</span>`;
 }
+const CONTACT_FORM_EMAIL="vitatech@vita-agro.com";
+document.getElementById('contactForm').addEventListener('submit',e=>{
+ e.preventDefault();
+ const name=document.getElementById('cfName').value.trim();
+ const email=document.getElementById('cfEmail').value.trim();
+ const typeSel=document.getElementById('cfType');
+ const typeLabel=typeSel.options[typeSel.selectedIndex].text;
+ const message=document.getElementById('cfMessage').value.trim();
+ const subject=`[Vita Tech] ${typeLabel} — ${name}`;
+ const body=(S.lang==='fr'
+  ?`Nom : ${name}\nEmail : ${email}\nType de demande : ${typeLabel}\n\n${message}`
+  :`Name: ${name}\nEmail: ${email}\nRequest type: ${typeLabel}\n\n${message}`);
+ window.location.href=`mailto:${CONTACT_FORM_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+ const st=document.getElementById('cfStatus');
+ st.textContent=S.lang==='fr'?'Votre messagerie va s\'ouvrir avec le message prêt à envoyer.':'Your email app should open with the message ready to send.';
+ setTimeout(()=>{if(st)st.textContent='';},6000);
+});
 function setLang(l){S.lang=l;save();applyI18n();}
 document.querySelectorAll('.lang button').forEach(b=>b.addEventListener('click',()=>setLang(b.dataset.lang)));
 const burger=document.getElementById('burger'),links=document.getElementById('navlinks');
