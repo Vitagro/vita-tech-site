@@ -253,7 +253,7 @@ const T={
   cf_name:"Your name",cf_email:"Your email",cf_type:"What do you need?",
   cf_type_support:"Support",cf_type_collab:"Collaboration",cf_type_conseil:"Advisory",cf_type_other:"Other",
   cf_message:"Describe your need",cf_submit:"Send message",
-  cf_note:"This opens your email app with the message ready to send to vitatech@vita-agro.com.",
+  cf_note:"This opens your email app with the message ready to send to vitatech@vita-agro.com (cc: support@vita-agro.com).",
   foot_by:"a brand of",foot_city:"Casablanca, Morocco",foot_tag:"Solutions IT & Innovation",
   m1k:"01 · Field-born",m1h:"Real operations",m1p:"Our products are extracted from platforms running in daily logistics and distribution — not built in a lab.",
   m2k:"02 · AI-native",m2h:"Automation inside",m2p:"Intelligent agents handle the repetitive work: orders, quality checks, routing, reporting.",
@@ -274,7 +274,7 @@ const T={
   cf_name:"Votre nom",cf_email:"Votre email",cf_type:"De quoi avez-vous besoin ?",
   cf_type_support:"Support",cf_type_collab:"Collaboration",cf_type_conseil:"Conseil",cf_type_other:"Autre",
   cf_message:"Décrivez votre besoin",cf_submit:"Envoyer le message",
-  cf_note:"Ceci ouvre votre messagerie avec le message prêt à envoyer à vitatech@vita-agro.com.",
+  cf_note:"Ceci ouvre votre messagerie avec le message prêt à envoyer à vitatech@vita-agro.com (copie : support@vita-agro.com).",
   foot_by:"une marque de",foot_city:"Casablanca, Maroc",foot_tag:"Solutions IT & Innovation",
   m1k:"01 · Né du terrain",m1h:"Opérations réelles",m1p:"Nos produits sont extraits de plateformes qui tournent chaque jour en logistique et distribution — pas conçus en labo.",
   m2k:"02 · IA native",m2h:"Automatisation intégrée",m2p:"Des agents intelligents absorbent le travail répétitif : commandes, contrôles qualité, tournées, reporting.",
@@ -381,6 +381,7 @@ function renderContact(){
  document.getElementById('contactMeta').innerHTML=`<a href="https://vita-agro.com" target="_blank" rel="noopener">vita-agro.com</a><span>Vita Tech · ${S.lang==='fr'?'Casablanca, Maroc':'Casablanca, Morocco'}</span>`;
 }
 const CONTACT_FORM_EMAIL="vitatech@vita-agro.com";
+const CONTACT_FORM_CC="support@vita-agro.com";
 document.getElementById('contactForm').addEventListener('submit',e=>{
  e.preventDefault();
  const name=document.getElementById('cfName').value.trim();
@@ -392,7 +393,7 @@ document.getElementById('contactForm').addEventListener('submit',e=>{
  const body=(S.lang==='fr'
   ?`Nom : ${name}\nEmail : ${email}\nType de demande : ${typeLabel}\n\n${message}`
   :`Name: ${name}\nEmail: ${email}\nRequest type: ${typeLabel}\n\n${message}`);
- window.location.href=`mailto:${CONTACT_FORM_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+ window.location.href=`mailto:${CONTACT_FORM_EMAIL}?cc=${CONTACT_FORM_CC}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
  const st=document.getElementById('cfStatus');
  st.textContent=S.lang==='fr'?'Votre messagerie va s\'ouvrir avec le message prêt à envoyer.':'Your email app should open with the message ready to send.';
  setTimeout(()=>{if(st)st.textContent='';},6000);
